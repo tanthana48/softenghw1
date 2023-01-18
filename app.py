@@ -51,7 +51,9 @@ def deleteMachine(id):
         cur = mysql.connection.cursor()
         queryStatement = f"DELETE FROM vendingmachine WHERE id = {id}"
         print(queryStatement)
-        cur.execute(queryStatement)
+        result = cur.execute(queryStatement)
+        if result == 0:
+            return "There is no this machine"
         mysql.connection.commit()
         cur.close()
         return "Successfully Deleted"
@@ -79,6 +81,37 @@ def addProduct():
             else:
                 addStatement = f"update vendingmachine set product = json_insert(product, '$.{productName}', '{amount}') where id = {id}"
                 cur.execute(addStatement)
+        else:
+            return "Dont have this machine id"
+        print(productName)
+        print(amount)
+        mysql.connection.commit()
+        cur.close()
+        return "Sucessfully Added"
+    else:
+        return None
+
+@app.route("/edit-product", methods=['POST'])
+def editProduct():
+    if request.method == 'POST':
+        cur = mysql.connection.cursor()
+        id = request.args.get("machineid")
+        productName = request.args.get("name")
+        amount = request.args.get("amount")
+        if productName == None or amount == None or id == None:
+            return "Plese put machineid, product and amount"
+        checkIdStatement = f"Select id from vendingmachine where id = {id}"
+        result_value = cur.execute(checkIdStatement)
+        #check whether there is this machine id or not 
+        if result_value > 0:
+            checkProductStatement = f"Select json_extract(product, '$.{productName}') from vendingmachine where id = {id} and JSON_EXTRACT(product, '$.{productName}') IS NOT NULL"
+            productresult = cur.execute(checkProductStatement)
+            #checkwhether there is this product or not
+            if productresult > 0:
+                addStatement = f"update vendingmachine set product = json_replace(product, '$.{productName}', '{amount}') where id = {id}"
+                cur.execute(addStatement)
+            else:
+                return "There is no this product in this machine"
         else:
             return "Dont have this machine id"
         print(productName)
