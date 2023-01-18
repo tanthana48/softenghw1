@@ -26,7 +26,7 @@ def list():
     cur.close()
     return machines
 
-@app.route("/createmachine", methods=['POST'])
+@app.route("/create-machine", methods=['POST'])
 def createMachine():
     if request.method == 'POST':
         name = request.args.get("name")
@@ -45,6 +45,18 @@ def createMachine():
     else:
         return None
 
+@app.route('/delete-machine/<int:id>/', methods=['GET'])
+def deleteMachine(id):
+    if request.method == 'GET':
+        cur = mysql.connection.cursor()
+        queryStatement = f"DELETE FROM vendingmachine WHERE id = {id}"
+        print(queryStatement)
+        cur.execute(queryStatement)
+        mysql.connection.commit()
+        cur.close()
+        return "Successfully Deleted"
+    else:
+        return None
 
 if __name__ == '__main__':
     app.run(debug=True)
