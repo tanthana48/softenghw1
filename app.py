@@ -118,7 +118,36 @@ def editProduct():
         print(amount)
         mysql.connection.commit()
         cur.close()
-        return "Sucessfully Added"
+        return "Sucessfully Edited"
+    else:
+        return None
+
+@app.route("/remove-product", methods=['POST'])
+def removeProduct():
+    if request.method == 'POST':
+        cur = mysql.connection.cursor()
+        id = request.args.get("machineid")
+        productName = request.args.get("name")
+        if productName == None or id == None:
+            return "Plese put both machineid and product"
+        checkIdStatement = f"Select id from vendingmachine where id = {id}"
+        result_value = cur.execute(checkIdStatement)
+        #check whether there is this machine id or not 
+        if result_value > 0:
+            checkProductStatement = f"Select json_extract(product, '$.{productName}') from vendingmachine where id = {id} and JSON_EXTRACT(product, '$.{productName}') IS NOT NULL"
+            productresult = cur.execute(checkProductStatement)
+            #checkwhether there is this product or not
+            if productresult > 0:
+                addStatement = f"update vendingmachine set product = json_remove(product, '$.{productName}') where id = {id}"
+                cur.execute(addStatement)
+            else:
+                return "There is no this product in this machine"
+        else:
+            return "Dont have this machine id"
+        print(productName)
+        mysql.connection.commit()
+        cur.close()
+        return "Sucessfully Removed"
     else:
         return None
 
