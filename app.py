@@ -26,5 +26,25 @@ def list():
     cur.close()
     return machines
 
+@app.route("/createmachine", methods=['POST'])
+def createMachine():
+    if request.method == 'POST':
+        name = request.args.get("name")
+        location = request.args.get("location")
+        print(name)
+        print(location)
+        if name == None or location == None:
+            return "Plese put both name and location"
+        cur = mysql.connection.cursor()
+        queryStatement = f"INSERT INTO vendingmachine(machine_name, location, product) values ('{name}', '{location}', json_object())"
+        print(queryStatement)
+        cur.execute(queryStatement) 
+        mysql.connection.commit()
+        cur.close()
+        return "Sucessfully Created"
+    else:
+        return None
+
+
 if __name__ == '__main__':
     app.run(debug=True)
