@@ -5,6 +5,7 @@ import yaml
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "Never push this line to github public repo"
 
+
 cred = yaml.load(open('cred.yaml'), Loader=yaml.Loader)
 app.config['MYSQL_HOST'] = cred['mysql_host']
 app.config['MYSQL_USER'] = cred['mysql_user']
