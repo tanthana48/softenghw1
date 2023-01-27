@@ -14,150 +14,85 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
 
 
-@app.route("/list")
-def list():
-    cur = mysql.connection.cursor()
-    query_statement = f"SELECT * FROM vendingmachine"
-    print(query_statement)
-    result_value = cur.execute(query_statement)
-    if result_value > 0:
-        machines = jsonify(cur.fetchall())
-    else:
-        machines = jsonify(None)
-    mysql.connection.commit()
-    cur.close()
-    return machines
-
-
-@app.route("/create-machine", methods=['POST'])
-def create_machine():
+def select_query(query_statement: str):
     try:
-        if request.method == 'POST':
-            name = request.args.get("name")
-            location = request.args.get("location")
-            print(name)
-            print(location)
-            if name == None or location == None:
-                return "Please put both name and location"
-            cur = mysql.connection.cursor()
-            query_statement = f"INSERT INTO vendingmachine(machine_name, location) values ('{name}', '{location}')"
-            print(query_statement)
+        with mysql.connection.cursor() as cur:
             cur.execute(query_statement)
-            mysql.connection.commit()
-            cur.close()
-            return jsonify(message='Successfully Created')
+            result = cur.fetchall()
+            return jsonify(result)
     except Exception as e:
         return jsonify(error=str(e))
 
 
+def action_query(query_statement: str):
+    try:
+        with mysql.connection.cursor() as cur:
+            cur.execute(query_statement)
+            mysql.connection.commit()
+            return jsonify(message="Success")
+    except Exception as e:
+        return jsonify(error=str(e))
+
+
+@app.route("/machine")
+def machine_list():
+    query_statement = f"SELECT * FROM vendingmachine"
+    return select_query(query_statement)
+
+
+@app.route('/product-list/<int:machine_id>/')
+def product_list(machine_id):
+    query_statement = f"SELECT * FROM product where machine_id = {machine_id}"
+    return select_query(query_statement)
+
+
+@app.route("/create-machine", methods=['POST'])
+def create_machine():
+    args = request.args
+    name = args.get("name")
+    location = args.get("location")
+    query_statement = f"INSERT INTO vendingmachine(machine_name, location) values ('{name}', '{location}')"
+    return action_query(query_statement)
+
+
+@app.route("/edit-machine", methods=['POST'])
+def edit_machine():
+    args = request.args
+    machine_id = args.get("id")
+    name = args.get("name")
+    query_statement = f"update vendingmachine set machine_name = {name} where id = '{machine_id}'"
+    return action_query(query_statement)
+
+
 @app.route('/delete-machine/<int:id>/', methods=['GET'])
 def delete_machine(id):
-    if request.method == 'GET':
-        cur = mysql.connection.cursor()
-        query_statement = f"DELETE FROM vendingmachine WHERE id = {id}"
-        print(query_statement)
-        result = cur.execute(query_statement)
-        if result == 0:
-            return "There is no this machine"
-        mysql.connection.commit()
-        cur.close()
-        return "Successfully Deleted"
-    else:
-        return None
+    query_statement = f"DELETE FROM vendingmachine WHERE id = {id}"
+    return action_query(query_statement)
 
 
 @app.route("/add-product", methods=['POST'])
 def add_product():
-    if request.method == 'POST':
-        cur = mysql.connection.cursor()
-        id = request.args.get("machineid")
-        product_name = request.args.get("name")
-        amount = request.args.get("amount")
-        if product_name == None or amount == None or id == None:
-            return "Plese put machineid, product and amount"
-        check_id_statement = f"Select id from vendingmachine where id = {id}"
-        result_value = cur.execute(check_id_statement)
-        # check whether there is this machine id or not
-        if result_value > 0:
-            check_product_statement = f"Select json_extract(product, '$.{product_name}') from vendingmachine where id = {id} and JSON_EXTRACT(product, '$.{product_name}') IS NOT NULL"
-            product_result = cur.execute(check_product_statement)
-            # check whether there is this product or not
-            if product_result > 0:
-                return "This product is already on the machine"
-            else:
-                add_statement = f"update vendingmachine set product = json_insert(product, '$.{product_name}', '{amount}') where id = {id}"
-                cur.execute(add_statement)
-        else:
-            return "Dont have this machine id"
-        print(product_name)
-        print(amount)
-        mysql.connection.commit()
-        cur.close()
-        return "Sucessfully Added"
-    else:
-        return None
+    args = request.args
+    machine_id = args.get("machine_id")
+    product_name = args.get("product_name")
+    amount = args.get("amount")
+    query_statement = f"INSERT INTO product(machine_id, product_name, amount) values ('{machine_id}', '{product_name}', '{amount}')"
+    return action_query(query_statement)
 
 
 @app.route("/edit-product", methods=['POST'])
 def edit_product():
-    if request.method == 'POST':
-        cur = mysql.connection.cursor()
-        id = request.args.get("machineid")
-        product_name = request.args.get("name")
-        amount = request.args.get("amount")
-        if product_name == None or amount == None or id == None:
-            return "Plese put machineid, product and amount"
-        check_id_statement = f"Select id from vendingmachine where id = {id}"
-        result_value = cur.execute(check_id_statement)
-        # check whether there is this machine id or not
-        if result_value > 0:
-            check_product_statement = f"Select json_extract(product, '$.{product_name}') from vendingmachine where id = {id} and JSON_EXTRACT(product, '$.{product_name}') IS NOT NULL"
-            product_result = cur.execute(check_product_statement)
-            # check whether there is this product or not
-            if product_result > 0:
-                add_statement = f"update vendingmachine set product = json_replace(product, '$.{product_name}', '{amount}') where id = {id}"
-                cur.execute(add_statement)
-            else:
-                return "There is no this product in this machine"
-        else:
-            return "Dont have this machine id"
-        print(product_name)
-        print(amount)
-        mysql.connection.commit()
-        cur.close()
-        return "Sucessfully Edited"
-    else:
-        return None
+    args = request.args
+    product_id = args.get("product_id")
+    amount = args.get("amount")
+    query_statement = f"UPDATE product set amount = {amount} where product_id = {product_id}"
+    return action_query(query_statement)
 
 
-@app.route("/remove-product", methods=['POST'])
-def remove_product():
-    if request.method == 'POST':
-        cur = mysql.connection.cursor()
-        id = request.args.get("machineid")
-        product_name = request.args.get("name")
-        if product_name is None or id is None:
-            return "Plese put both machineid and product"
-        check_id_statement = f"Select id from vendingmachine where id = {id}"
-        result_value = cur.execute(check_id_statement)
-        # check whether there is this machine id or not
-        if result_value > 0:
-            check_product_statement = f"Select json_extract(product, '$.{product_name}') from vendingmachine where id = {id} and JSON_EXTRACT(product, '$.{product_name}') IS NOT NULL"
-            product_result = cur.execute(check_product_statement)
-            # check whether there is this product or not
-            if product_result > 0:
-                add_statement = f"update vendingmachine set product = json_remove(product, '$.{product_name}') where id = {id}"
-                cur.execute(add_statement)
-            else:
-                return "There is no this product in this machine"
-        else:
-            return "Dont have this machine id"
-        print(product_name)
-        mysql.connection.commit()
-        cur.close()
-        return "Sucessfully Removed"
-    else:
-        return None
+@app.route("/remove-product/<int:product_id>/", methods=['POST'])
+def remove_product(product_id):
+    query_statement = f"DELETE FROM product WHERE product_id = {product_id}"
+    return action_query(query_statement)
 
 
 if __name__ == '__main__':
