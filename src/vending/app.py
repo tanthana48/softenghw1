@@ -1,5 +1,5 @@
 import yaml
-from flask import Flask, jsonify, request
+from flask import Flask, Response, jsonify, request
 from flask_mysqldb import MySQL
 
 app = Flask(__name__)
@@ -15,7 +15,8 @@ app.config["MYSQL_CURSORCLASS"] = "DictCursor"
 mysql = MySQL(app)
 
 
-def select_query(query_statement: str):
+def select_query(query_statement: str) -> Response:
+    """Execute query and result in json."""
     try:
         with mysql.connection.cursor() as cur:
             cur.execute(query_statement)
@@ -25,7 +26,8 @@ def select_query(query_statement: str):
         return jsonify(error=str(e))
 
 
-def action_query(query_statement: str):
+def action_query(query_statement: str) -> Response:
+    """Execute query and result in json."""
     try:
         with mysql.connection.cursor() as cur:
             cur.execute(query_statement)
@@ -36,19 +38,22 @@ def action_query(query_statement: str):
 
 
 @app.route("/machine")
-def machine_list():
-    query_statement = f"SELECT * FROM vendingmachine"
+def machine_list() -> Response:
+    """List all machine info."""
+    query_statement = "SELECT * FROM vendingmachine"
     return select_query(query_statement)
 
 
 @app.route("/product-list/<int:machine_id>/")
-def product_list(machine_id):
+def product_list(machine_id: int) -> Response:
+    """List all product info by machine id."""
     query_statement = f"SELECT * FROM product where machine_id = {machine_id}"
     return select_query(query_statement)
 
 
 @app.route("/create-machine", methods=["POST"])
-def create_machine():
+def create_machine() -> Response:
+    """Create new machine."""
     args = request.args
     name = args.get("name")
     location = args.get("location")
@@ -57,7 +62,8 @@ def create_machine():
 
 
 @app.route("/edit-machine", methods=["POST"])
-def edit_machine():
+def edit_machine() -> Response:
+    """Edit machine."""
     args = request.args
     machine_id = args.get("id")
     name = args.get("name")
@@ -66,13 +72,15 @@ def edit_machine():
 
 
 @app.route("/delete-machine/<int:id>/", methods=["GET"])
-def delete_machine(id):
+def delete_machine(id: int) -> Response:
+    """Delete machine by id."""
     query_statement = f"DELETE FROM vendingmachine WHERE id = {id}"
     return action_query(query_statement)
 
 
 @app.route("/add-product", methods=["POST"])
-def add_product():
+def add_product() -> Response:
+    """Add product."""
     args = request.args
     machine_id = args.get("machine_id")
     product_name = args.get("product_name")
@@ -84,7 +92,8 @@ def add_product():
 
 
 @app.route("/edit-product", methods=["POST"])
-def edit_product():
+def edit_product() -> Response:
+    """Edit product."""
     args = request.args
     product_id = args.get("product_id")
     amount = args.get("amount")
@@ -93,7 +102,8 @@ def edit_product():
 
 
 @app.route("/remove-product/<int:product_id>/", methods=["POST"])
-def remove_product(product_id):
+def remove_product(product_id: int) -> Response:
+    """Remove product by id."""
     query_statement = f"DELETE FROM product WHERE product_id = {product_id}"
     return action_query(query_statement)
 
