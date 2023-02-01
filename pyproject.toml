@@ -10,6 +10,7 @@ flask = "^2.2.2"
 pyyaml = "^6.0"
 python-dotenv = "^0.21.1"
 flask-mysqldb = "^1.0.1"
+pytest = "^7.2.1"
 
 
 [tool.poetry.dev-dependencies]
