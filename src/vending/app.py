@@ -1,17 +1,17 @@
-from flask import Flask, request, jsonify
-from flask_mysqldb import MySQL
 import yaml
+from flask import Flask, jsonify, request
+from flask_mysqldb import MySQL
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "Never push this line to github public repo"
+app.config["SECRET_KEY"] = "Never push this line to github public repo"
 
 
-cred = yaml.load(open('cred.yaml'), Loader=yaml.Loader)
-app.config['MYSQL_HOST'] = cred['mysql_host']
-app.config['MYSQL_USER'] = cred['mysql_user']
-app.config['MYSQL_PASSWORD'] = cred['mysql_password']
-app.config['MYSQL_DB'] = cred['mysql_db']
-app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+cred = yaml.load(open("cred.yaml"), Loader=yaml.Loader)
+app.config["MYSQL_HOST"] = cred["mysql_host"]
+app.config["MYSQL_USER"] = cred["mysql_user"]
+app.config["MYSQL_PASSWORD"] = cred["mysql_password"]
+app.config["MYSQL_DB"] = cred["mysql_db"]
+app.config["MYSQL_CURSORCLASS"] = "DictCursor"
 mysql = MySQL(app)
 
 
@@ -41,13 +41,13 @@ def machine_list():
     return select_query(query_statement)
 
 
-@app.route('/product-list/<int:machine_id>/')
+@app.route("/product-list/<int:machine_id>/")
 def product_list(machine_id):
     query_statement = f"SELECT * FROM product where machine_id = {machine_id}"
     return select_query(query_statement)
 
 
-@app.route("/create-machine", methods=['POST'])
+@app.route("/create-machine", methods=["POST"])
 def create_machine():
     args = request.args
     name = args.get("name")
@@ -56,7 +56,7 @@ def create_machine():
     return action_query(query_statement)
 
 
-@app.route("/edit-machine", methods=['POST'])
+@app.route("/edit-machine", methods=["POST"])
 def edit_machine():
     args = request.args
     machine_id = args.get("id")
@@ -65,23 +65,25 @@ def edit_machine():
     return action_query(query_statement)
 
 
-@app.route('/delete-machine/<int:id>/', methods=['GET'])
+@app.route("/delete-machine/<int:id>/", methods=["GET"])
 def delete_machine(id):
     query_statement = f"DELETE FROM vendingmachine WHERE id = {id}"
     return action_query(query_statement)
 
 
-@app.route("/add-product", methods=['POST'])
+@app.route("/add-product", methods=["POST"])
 def add_product():
     args = request.args
     machine_id = args.get("machine_id")
     product_name = args.get("product_name")
     amount = args.get("amount")
-    query_statement = f"INSERT INTO product(machine_id, product_name, amount) values ('{machine_id}', '{product_name}', '{amount}')"
+    query_statement = (
+        f"INSERT INTO product(machine_id, product_name, amount) values ('{machine_id}', '{product_name}', '{amount}')"
+    )
     return action_query(query_statement)
 
 
-@app.route("/edit-product", methods=['POST'])
+@app.route("/edit-product", methods=["POST"])
 def edit_product():
     args = request.args
     product_id = args.get("product_id")
@@ -90,11 +92,11 @@ def edit_product():
     return action_query(query_statement)
 
 
-@app.route("/remove-product/<int:product_id>/", methods=['POST'])
+@app.route("/remove-product/<int:product_id>/", methods=["POST"])
 def remove_product(product_id):
     query_statement = f"DELETE FROM product WHERE product_id = {product_id}"
     return action_query(query_statement)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)

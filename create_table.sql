@@ -18,4 +18,3 @@ create table softeng.product
     product_name         varchar(255) null,
     amount               int default 0
 );
-
