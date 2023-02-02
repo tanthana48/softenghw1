@@ -6,6 +6,7 @@ if [ $# -lt 1 ]; then
 	exit
 fi
 
+
 docker run --name mysql-db -p 3306:3306 -e MYSQL_ROOT_PASSWORD=$1 -d mysql
 while ! docker exec -i mysql-db mysql --user=root --password=$1 -e "status" &> /dev/null ; do
     echo "Waiting for database to start..."
