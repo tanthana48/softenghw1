@@ -50,7 +50,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Run server script
-        run: ./scripts/create-server.sh ${{ secrets.PASSWORD }}
+        run: ./script/create-server.sh ${{ secrets.PASSWORD }}
         shell: bash
 
       - name: Install Poetry
