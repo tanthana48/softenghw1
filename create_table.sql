@@ -1,4 +1,4 @@
-create table softeng.vendingmachine
+create table vending_machine.machine
 (
     id           int auto_increment
         primary key,
@@ -6,7 +6,7 @@ create table softeng.vendingmachine
     location     varchar(255) null
 );
 
-create table softeng.product
+create table vending_machine.product
 (
 
     product_id           int auto_increment

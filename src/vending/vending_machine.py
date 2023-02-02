@@ -1,24 +1,25 @@
 from flask import Blueprint, Response, request
-from query import action_query, select_query
 
-machine = Blueprint("machine", __name__)
+from .query import action_query, select_query
+
+machine_blueprint = Blueprint("vending_machine", __name__)
 
 
-@machine.route("/machine")
+@machine_blueprint.route("/machine")
 def machine_list() -> Response:
     """List all machine info."""
     query_statement = "SELECT * FROM vendingmachine"
     return select_query(query_statement)
 
 
-@machine.route("/product-list/<int:machine_id>/")
+@machine_blueprint.route("/product-list/<int:machine_id>/")
 def product_list(machine_id: int) -> Response:
     """List all product info by machine id."""
     query_statement = f"SELECT * FROM product where machine_id = {machine_id}"
     return select_query(query_statement)
 
 
-@machine.route("/create-machine", methods=["POST"])
+@machine_blueprint.route("/create-machine", methods=["POST"])
 def create_machine() -> Response:
     """Create new machine."""
     args = request.args
@@ -28,7 +29,7 @@ def create_machine() -> Response:
     return action_query(query_statement)
 
 
-@machine.route("/edit-machine", methods=["POST"])
+@machine_blueprint.route("/edit-machine", methods=["POST"])
 def edit_machine() -> Response:
     """Edit machine."""
     args = request.args
@@ -38,14 +39,14 @@ def edit_machine() -> Response:
     return action_query(query_statement)
 
 
-@machine.route("/delete-machine/<int:id>/", methods=["GET"])
+@machine_blueprint.route("/delete-machine/<int:id>/", methods=["GET"])
 def delete_machine(id: int) -> Response:
     """Delete machine by id."""
     query_statement = f"DELETE FROM vendingmachine WHERE id = {id}"
     return action_query(query_statement)
 
 
-@machine.route("/add-product", methods=["POST"])
+@machine_blueprint.route("/add-product", methods=["POST"])
 def add_product() -> Response:
     """Add product."""
     args = request.args
@@ -58,7 +59,7 @@ def add_product() -> Response:
     return action_query(query_statement)
 
 
-@machine.route("/edit-product", methods=["POST"])
+@machine_blueprint.route("/edit-product", methods=["POST"])
 def edit_product() -> Response:
     """Edit product."""
     args = request.args
@@ -68,7 +69,7 @@ def edit_product() -> Response:
     return action_query(query_statement)
 
 
-@machine.route("/remove-product/<int:product_id>/", methods=["POST"])
+@machine_blueprint.route("/remove-product/<int:product_id>/", methods=["POST"])
 def remove_product(product_id: int) -> Response:
     """Remove product by id."""
     query_statement = f"DELETE FROM product WHERE product_id = {product_id}"

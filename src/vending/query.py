@@ -1,5 +1,6 @@
-from app import mysql
 from flask import jsonify
+
+from app import mysql
 
 
 def select_query(query_statement: str) -> jsonify(str):
