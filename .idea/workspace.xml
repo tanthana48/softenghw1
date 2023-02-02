@@ -70,7 +70,7 @@
       <recent name="C:\Users\uSeR\Desktop\softenghw1\src\vending" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_machine.test_remove_product">
+  <component name="RunManager" selected="Flask server.softenghw1">
     <configuration name="softenghw1" type="PythonConfigurationType" factoryName="Python">
       <module name="softenghw1" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -100,7 +100,7 @@
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
