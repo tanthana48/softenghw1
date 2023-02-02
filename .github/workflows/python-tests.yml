@@ -49,6 +49,10 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
+      - name: Run server script
+        run: ./backend/scripts/create-server.sh ${{ secrets.PASSWORD }}
+        shell: bash
+
       - name: Install Poetry
         run: |
           curl -sL https://install.python-poetry.org | POETRY_VERSION=${{ env.POETRY_VERSION }} python - -y

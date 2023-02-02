@@ -1,4 +1,6 @@
-import yaml
+import os
+
+from dotenv import load_dotenv
 from flask import Flask
 from flask_mysqldb import MySQL
 
@@ -11,11 +13,11 @@ def create_app() -> Flask:
 
     app.config["SECRET_KEY"] = "Never push this line to github public repo"
 
-    cred = yaml.load(open("cred.yaml"), Loader=yaml.Loader)
-    app.config["MYSQL_HOST"] = cred["mysql_host"]
-    app.config["MYSQL_USER"] = cred["mysql_user"]
-    app.config["MYSQL_PASSWORD"] = cred["mysql_password"]
-    app.config["MYSQL_DB"] = cred["mysql_db"]
+    load_dotenv()
+    app.config["MYSQL_HOST"] = os.getenv("DB_HOST")
+    app.config["MYSQL_USER"] = os.getenv("DB_USER")
+    app.config["MYSQL_PASSWORD"] = os.getenv("DB_PASS")
+    app.config["MYSQL_DB"] = "vending_machine"
     app.config["MYSQL_CURSORCLASS"] = "DictCursor"
 
     mysql.init_app(app)

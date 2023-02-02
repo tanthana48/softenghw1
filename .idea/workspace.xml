@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e8f90908-7b93-45c4-8d0e-426ac402398a" name="Changes" comment="test update poetry">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/python-tests.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/python-tests.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="e8f90908-7b93-45c4-8d0e-426ac402398a" name="Changes" comment="add noqa">
+      <change afterPath="$PROJECT_DIR$/script/create-server.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/create_table.sql" beforeDir="false" afterPath="$PROJECT_DIR$/script/create_table.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,12 +64,13 @@
       <recent name="C:\Users\uSeR\Desktop\softenghw1\src\vending" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\uSeR\Desktop\softenghw1\script" />
       <recent name="C:\Users\uSeR\Desktop\softenghw1\src\vending" />
       <recent name="C:\Users\uSeR\Desktop\softenghw1\tests" />
       <recent name="C:\Users\uSeR\Desktop\softenghw1" />
     </key>
   </component>
-  <component name="RunManager" selected="Flask server.softenghw1">
+  <component name="RunManager" selected="Python tests.pytest for test_machine.test_add_product">
     <configuration name="softenghw1" type="PythonConfigurationType" factoryName="Python">
       <module name="softenghw1" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -192,9 +195,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_machine.test_add_product" />
         <item itemvalue="Python tests.pytest for test_machine.test_remove_product" />
         <item itemvalue="Python tests.pytest for test_machine.test_edit_product" />
-        <item itemvalue="Python tests.pytest for test_machine.test_add_product" />
         <item itemvalue="Python tests.pytest for test_machine.test_delete_machine" />
         <item itemvalue="Python tests.pytest for test_machine.test_edit_machine" />
       </list>
@@ -219,7 +222,7 @@
       <workItem from="1675262422242" duration="11145000" />
       <workItem from="1675313784994" duration="560000" />
       <workItem from="1675322221468" duration="19604000" />
-      <workItem from="1675367195615" duration="909000" />
+      <workItem from="1675367195615" duration="2451000" />
     </task>
     <task id="LOCAL-00001" summary="add tests and fix">
       <created>1674838862338</created>
@@ -284,7 +287,21 @@
       <option name="project" value="LOCAL" />
       <updated>1675367516060</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="change poetry version">
+      <created>1675368138242</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1675368138242</updated>
+    </task>
+    <task id="LOCAL-00011" summary="add noqa">
+      <created>1675368473032</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1675368473032</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -318,7 +335,9 @@
     <MESSAGE value="coverage 98%" />
     <MESSAGE value="add more test coverage 98%" />
     <MESSAGE value="test update poetry" />
-    <option name="LAST_COMMIT_MESSAGE" value="test update poetry" />
+    <MESSAGE value="change poetry version" />
+    <MESSAGE value="add noqa" />
+    <option name="LAST_COMMIT_MESSAGE" value="add noqa" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/softenghw1$pytest_for_test_machine_test_edit_machine.coverage" NAME="pytest for test_machine.test_edit_machine Coverage Results" MODIFIED="1675355973766" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
@@ -326,7 +345,7 @@
     <SUITE FILE_PATH="coverage/softenghw1$pytest_for_test_machine_test_action_query.coverage" NAME="pytest for test_machine.test_action_query Coverage Results" MODIFIED="1675341290413" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/softenghw1$Flask__tests_test_query_py_.coverage" NAME="Flask (tests/test_query.py) Coverage Results" MODIFIED="1675353902193" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/softenghw1$pytest_for_test_machine_test_create_machine.coverage" NAME="pytest for test_machine.test_create_machine Coverage Results" MODIFIED="1675355967124" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/softenghw1$pytest_for_test_machine_test_add_product.coverage" NAME="pytest for test_machine.test_add_product Coverage Results" MODIFIED="1675356012280" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/softenghw1$pytest_for_test_machine_test_add_product.coverage" NAME="pytest for test_machine.test_add_product Coverage Results" MODIFIED="1675369576862" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/softenghw1$pytest_for_test_machine_test_machine_list.coverage" NAME="pytest for test_machine.test_machine_list Coverage Results" MODIFIED="1675354889884" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/softenghw1$pytest_for_test_machine_test_remove_product.coverage" NAME="pytest for test_machine.test_remove_product Coverage Results" MODIFIED="1675356040237" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/softenghw1$pytest_for_test_machine_test_product_list.coverage" NAME="pytest for test_machine.test_product_list Coverage Results" MODIFIED="1675354965755" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
