@@ -53,6 +53,10 @@ jobs:
         run: ./script/create-server.sh ${{ secrets.PASSWORD }}
         shell: bash
 
+      - name: Create Env File
+        run: |
+            echo "${{ secrets.ENV_FILE }}" > .env
+
       - name: Install Poetry
         run: |
           curl -sL https://install.python-poetry.org | POETRY_VERSION=${{ env.POETRY_VERSION }} python - -y
