@@ -1,9 +1,12 @@
+import sys
+
 import pytest
 import yaml
 from flask import Flask
 
-from app import mysql
-from src.vending import vending_machine
+sys.path.append(".")
+from app import mysql  # noqa: E402
+from src.vending import vending_machine  # noqa: E402
 
 
 @pytest.fixture
