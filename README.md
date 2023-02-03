@@ -28,27 +28,18 @@ Normally it checks only the file you are committing. But if you wish to run it m
 poetry run pre-commit run --all
 ```
 
-### Install Jupyter Notebook Kernel
+### Run docker
 ```
-poetry run python -m ipykernel install --user --name automated_clean_code
+docker run --name vending_machine -e POSTGRES_PASSWORD={password} -p 5432:5432 -d postgres
 ```
 
-### Adjusting the Dependencies
-edit pyproject.toml or just do
+### Adjusting the Postgres
+edit app.py
 ```
-poetry add numpy
+"postgresql://postgres:{password}@localhost:5432/vending_machine"
 ```
-or for dev dependencies
-```
-poetry add --dev numpy
-```
-See [python-poetry.org](https://python-poetry.org/)
 
-### Change Pytest, Flake, Coverage Setting
-See ```tox.ini```
+### Create Database
+```CREATE DATABASE "vending_machine";```
 
-### Change how sonarqube behaves.
-See ```sonar-project.properties```
-
-### Get Pycharm to show the correct coverage
-Ironically in pycharm test configuration add `--no-cov` to `Additional Arguments` this turn off pytest-cov coverage and uses Pycharm's own pytest.
+### Finish!! You can try now
