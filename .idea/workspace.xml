@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e8f90908-7b93-45c4-8d0e-426ac402398a" name="Changes" comment="sonarcloud">
-      <change beforePath="$PROJECT_DIR$/sonar-project.properties" beforeDir="false" afterPath="$PROJECT_DIR$/sonar-project.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -227,7 +227,7 @@
       <workItem from="1675313784994" duration="560000" />
       <workItem from="1675322221468" duration="19604000" />
       <workItem from="1675367195615" duration="3976000" />
-      <workItem from="1675432225619" duration="17178000" />
+      <workItem from="1675432225619" duration="17549000" />
     </task>
     <task id="LOCAL-00001" summary="add tests and fix">
       <created>1674838862338</created>
@@ -418,7 +418,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675449293085</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="sonarcloud">
+      <created>1675449559395</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1675449559395</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
