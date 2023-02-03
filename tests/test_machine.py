@@ -1,79 +1,102 @@
-import requests
+from flask.testing import FlaskClient
+
+from vending.vending_machine import status
 
 
-def test_create_machine():
-    url = "http://127.0.0.1:5000/create-machine"
-
-    data = {
-        "name": "test",
-        "location": "test"
-    }
-
-    r = requests.post(url, data=data)
-
-    assert r.json() == {'message': 'Success'}
+def test_status():
+    assert status(0) == {"message": "Success"}
+    assert status(1) == {"error": "Missing required data"}
 
 
-def test_edit_machine():
-    url = "http://127.0.0.1:5000/edit-machine"
-
-    data = {
-        "machine_id": "1",
-        "name": "test2"
-    }
-
-    r = requests.post(url, data=data)
-
-    assert r.json() == {'message': 'Success'}
+def test_machine_list(client: FlaskClient):
+    response = client.get("/machine")
+    assert response.status_code == 200
 
 
-def test_delete_machine():
-    url = "http://127.0.0.1:5000/delete-machine/5"
-
-    r = requests.get(url)
-
-    assert r.json() == {'message': 'Success'}
+def test_product_list(client: FlaskClient):
+    response = client.get("/product-list/1/")
+    assert response.status_code == 200
 
 
-def test_add_product():
-    url = "http://127.0.0.1:5000/add-product"
-
-    data = {
-        "machine_id": "2",
-        "product_name": "sprite",
-        "amount": "10"
-    }
-
-    r = requests.post(url, data=data)
-
-    assert r.json() == {'message': 'Success'}
+create_machine: str = "/create-machine"
 
 
-def test_edit_product():
-    url = "http://127.0.0.1:5000/edit-product"
-
-    data = {
-        "product_id": "1",
-        "amount": "10"
-    }
-
-    r = requests.post(url, data=data)
-
-    assert r.json() == {'message': 'Success'}
+def test_create_machine(client: FlaskClient):
+    response = client.post(create_machine, data={"name": "Test Machine", "location": "Test Location"})
+    assert response.status_code == 200
+    assert response.get_json() == {"message": "Success"}
 
 
-def test_remove_product():
-    url = "http://127.0.0.1:5000/remove-product/1"
-
-    r = requests.get(url)
-
-    assert r.json() == {'message': 'Success'}
+def test_create_machine_fail(client: FlaskClient):
+    response = client.post(create_machine, data={"location": "Test Location"})
+    assert response.get_json() == status(1)
 
 
-if __name__ == '__main__':
-    test_create_machine()
-    test_edit_machine()
-    test_delete_machine()
-    test_add_product()
-    test_edit_product()
-    test_remove_product()
+def test_create_machine2(client: FlaskClient):
+    response = client.post(create_machine, data={"name": "Test Machine2", "location": "Test Location2"})
+    assert response.status_code == 200
+    assert response.get_json() == {"message": "Success"}
+
+
+edit_machine: str = "/edit-machine"
+
+
+def test_edit_machine(client: FlaskClient):
+    response = client.post(edit_machine, data={"machine_id": 1, "name": "Test", "location": "Test"})
+    assert response.status_code == 200
+    assert response.get_json() == {"message": "Success"}
+
+
+def test_edit_machine_fail(client: FlaskClient):
+    response = client.post(edit_machine, data={"name": "Test", "location": "Test"})
+    assert response.get_json() == status(1)
+
+
+def test_edit_machine_fail2(client: FlaskClient):
+    response = client.post(edit_machine, data={"machine_id": 100, "name": "Test", "location": "Test"})
+    assert response.get_json() == {"error": "Machine not found"}
+
+
+def test_delete_machine(client: FlaskClient):
+    response = client.get("/delete-machine/1/")
+    assert response.status_code == 200
+    assert response.get_json() == {"message": "Success"}
+
+
+def test_delete_machine_fail(client: FlaskClient):
+    response = client.get("/delete-machine/100/")
+    assert response.get_json() == {"error": "Machine not found"}
+
+
+def test_add_product(client: FlaskClient):
+    response = client.post("/add-product", data={"machine_id": 2, "product_name": "Test Product", "amount": 10})
+    assert response.status_code == 200
+    assert response.get_json() == {"message": "Success"}
+
+
+def test_add_product2(client: FlaskClient):
+    response = client.post("/add-product", data={"machine_id": 2, "product_name": "Test", "amount": 10})
+    assert response.status_code == 200
+    assert response.get_json() == {"message": "Success"}
+
+
+def test_edit_product(client: FlaskClient):
+    response = client.post("/edit-product", data={"product_id": 1, "amount": 100})
+    assert response.status_code == 200
+    assert response.get_json() == {"message": "Success"}
+
+
+def test_edit_product_fail(client: FlaskClient):
+    response = client.post("/edit-product", data={"product_id": 100, "amount": 100})
+    assert response.get_json() == {"error": "Product not found"}
+
+
+def test_remove_product(client: FlaskClient):
+    response = client.get("/delete-product/2/")
+    assert response.status_code == 200
+    assert response.get_json() == {"message": "Success"}
+
+
+def test_remove_product_fail(client: FlaskClient):
+    response = client.get("/delete-product/200/")
+    assert response.get_json() == {"error": "Product not found"}

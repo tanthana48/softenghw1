@@ -1,4 +1,7 @@
-.DS_Store
+# Created by https://www.toptal.com/developers/gitignore/api/Python
+# Edit at https://www.toptal.com/developers/gitignore?templates=Python
+
+### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -159,5 +162,8 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
-*.toml
-*.lock
+
+# End of https://www.toptal.com/developers/gitignore/api/Python
+coverage.xml
+.idea/
+.vscode/
