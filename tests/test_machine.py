@@ -17,20 +17,32 @@ def test_create_machine(client: FlaskClient):
     assert response.get_json() == {"message": "Success"}
 
 
+def test_create_machine2(client: FlaskClient):
+    response = client.post("/create-machine", data={"name": "Test Machine2", "location": "Test Location2"})
+    assert response.status_code == 200
+    assert response.get_json() == {"message": "Success"}
+
+
 def test_edit_machine(client: FlaskClient):
-    response = client.post("/edit-machine", data={"id": 1, "name": "Test", "location": "Test"})
+    response = client.post("/edit-machine", data={"machine_id": 1, "name": "Test", "location": "Test"})
     assert response.status_code == 200
     assert response.get_json() == {"message": "Success"}
 
 
 def test_delete_machine(client: FlaskClient):
-    response = client.get("/delete-machine/21/")
+    response = client.get("/delete-machine/1/")
     assert response.status_code == 200
     assert response.get_json() == {"message": "Success"}
 
 
 def test_add_product(client: FlaskClient):
-    response = client.post("/add-product", data={"machine_id": 1, "product_name": "Test Product", "amount": 10})
+    response = client.post("/add-product", data={"machine_id": 2, "product_name": "Test Product", "amount": 10})
+    assert response.status_code == 200
+    assert response.get_json() == {"message": "Success"}
+
+
+def test_add_product2(client: FlaskClient):
+    response = client.post("/add-product", data={"machine_id": 2, "product_name": "Test", "amount": 10})
     assert response.status_code == 200
     assert response.get_json() == {"message": "Success"}
 
@@ -42,6 +54,6 @@ def test_edit_product(client: FlaskClient):
 
 
 def test_remove_product(client: FlaskClient):
-    response = client.get("/remove-product/1/")
+    response = client.get("/delete-product/2/")
     assert response.status_code == 200
     assert response.get_json() == {"message": "Success"}
