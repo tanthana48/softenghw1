@@ -227,7 +227,7 @@
       <workItem from="1675313784994" duration="560000" />
       <workItem from="1675322221468" duration="19604000" />
       <workItem from="1675367195615" duration="3976000" />
-      <workItem from="1675432225619" duration="17549000" />
+      <workItem from="1675432225619" duration="17947000" />
     </task>
     <task id="LOCAL-00001" summary="add tests and fix">
       <created>1674838862338</created>
@@ -425,7 +425,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675449559395</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="sonarcloud">
+      <created>1675450046235</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1675450046235</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
