@@ -2,7 +2,7 @@ import pytest
 from flask import Flask
 from flask.testing import FlaskClient
 
-from src.vending.app import create_app
+from vending.app import create_app
 
 
 @pytest.fixture()
