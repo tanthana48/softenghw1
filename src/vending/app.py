@@ -1,7 +1,6 @@
+from database import db
 from flask import Flask
-
-from src.vending.database import db
-from src.vending.vending_machine import machine_blueprint
+from vending_machine import machine_blueprint
 
 
 def create_app() -> Flask:
