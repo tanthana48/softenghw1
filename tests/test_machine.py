@@ -1,5 +1,12 @@
 from flask.testing import FlaskClient
 
+from vending.vending_machine import status
+
+
+def test_status():
+    assert status(0) == {"message": "Success"}
+    assert status(1) == {"error": "Missing required data"}
+
 
 def test_machine_list(client: FlaskClient):
     response = client.get("/machine")
@@ -11,28 +18,54 @@ def test_product_list(client: FlaskClient):
     assert response.status_code == 200
 
 
+create_machine: str = "/create-machine"
+
+
 def test_create_machine(client: FlaskClient):
-    response = client.post("/create-machine", data={"name": "Test Machine", "location": "Test Location"})
+    response = client.post(create_machine, data={"name": "Test Machine", "location": "Test Location"})
     assert response.status_code == 200
     assert response.get_json() == {"message": "Success"}
+
+
+def test_create_machine_fail(client: FlaskClient):
+    response = client.post(create_machine, data={"location": "Test Location"})
+    assert response.get_json() == status(1)
 
 
 def test_create_machine2(client: FlaskClient):
-    response = client.post("/create-machine", data={"name": "Test Machine2", "location": "Test Location2"})
+    response = client.post(create_machine, data={"name": "Test Machine2", "location": "Test Location2"})
     assert response.status_code == 200
     assert response.get_json() == {"message": "Success"}
+
+
+edit_machine: str = "/edit-machine"
 
 
 def test_edit_machine(client: FlaskClient):
-    response = client.post("/edit-machine", data={"machine_id": 1, "name": "Test", "location": "Test"})
+    response = client.post(edit_machine, data={"machine_id": 1, "name": "Test", "location": "Test"})
     assert response.status_code == 200
     assert response.get_json() == {"message": "Success"}
+
+
+def test_edit_machine_fail(client: FlaskClient):
+    response = client.post(edit_machine, data={"name": "Test", "location": "Test"})
+    assert response.get_json() == status(1)
+
+
+def test_edit_machine_fail2(client: FlaskClient):
+    response = client.post(edit_machine, data={"machine_id": 100, "name": "Test", "location": "Test"})
+    assert response.get_json() == {"error": "Machine not found"}
 
 
 def test_delete_machine(client: FlaskClient):
     response = client.get("/delete-machine/1/")
     assert response.status_code == 200
     assert response.get_json() == {"message": "Success"}
+
+
+def test_delete_machine_fail(client: FlaskClient):
+    response = client.get("/delete-machine/100/")
+    assert response.get_json() == {"error": "Machine not found"}
 
 
 def test_add_product(client: FlaskClient):
@@ -53,7 +86,17 @@ def test_edit_product(client: FlaskClient):
     assert response.get_json() == {"message": "Success"}
 
 
+def test_edit_product_fail(client: FlaskClient):
+    response = client.post("/edit-product", data={"product_id": 100, "amount": 100})
+    assert response.get_json() == {"error": "Product not found"}
+
+
 def test_remove_product(client: FlaskClient):
     response = client.get("/delete-product/2/")
     assert response.status_code == 200
     assert response.get_json() == {"message": "Success"}
+
+
+def test_remove_product_fail(client: FlaskClient):
+    response = client.get("/delete-product/200/")
+    assert response.get_json() == {"error": "Product not found"}
