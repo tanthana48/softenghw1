@@ -49,13 +49,9 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Run server script
-        run: ./script/create-server.sh ${{ secrets.PASSWORD }}
-        shell: bash
-
-      - name: Create Env File
+      - name: Run docker
         run: |
-            echo "${{ secrets.ENV_FILE }}" > .env
+            docker run --name vending_machine -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres
 
       - name: Install Poetry
         run: |

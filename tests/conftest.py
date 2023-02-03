@@ -1,11 +1,8 @@
-import sys
-
 import pytest
 from flask import Flask
 from flask.testing import FlaskClient
 
-sys.path.append(".")
-from app import create_app  # noqa: E402
+from src.vending.app import create_app
 
 
 @pytest.fixture()
