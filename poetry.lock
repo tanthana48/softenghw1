@@ -411,6 +411,22 @@ async = ["asgiref (>=3.2)"]
 dotenv = ["python-dotenv"]
 
 [[package]]
+name = "flask-sqlalchemy"
+version = "3.0.3"
+description = "Add SQLAlchemy support to your Flask application."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "Flask-SQLAlchemy-3.0.3.tar.gz", hash = "sha256:2764335f3c9d7ebdc9ed6044afaf98aae9fa50d7a074cef55dde307ec95903ec"},
+    {file = "Flask_SQLAlchemy-3.0.3-py3-none-any.whl", hash = "sha256:add5750b2f9cd10512995261ee2aa23fab85bd5626061aa3c564b33bb4aa780a"},
+]
+
+[package.dependencies]
+Flask = ">=2.2"
+SQLAlchemy = ">=1.4.18"
+
+[[package]]
 name = "greenlet"
 version = "2.0.2"
 description = "Lightweight in-process concurrent programming"
@@ -1558,4 +1574,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.7,<4.0"
-content-hash = "e1aafc0b4b8bfa08bb8ac76e550cab1b353df302df9fa740fb89055fa5bebb67"
+content-hash = "474bbaf55a86e14a3cb6d66228e4aaf26d4c2d05dcbcb9d3b80361c4199e23e5"
