@@ -16,18 +16,6 @@ poetry install
 poetry run pytest
 ```
 
-## What to do next
-
-### Install Pre-commit (Recommended)
-```
-poetry run pre-commit install
-```
-If you wish to edit pre-commit behavior see ```.pre-commit-config.yaml```.
-Normally it checks only the file you are committing. But if you wish to run it manually for all files do
-```
-poetry run pre-commit run --all
-```
-
 ### Run docker
 ```
 docker run --name vending_machine -e POSTGRES_PASSWORD={password} -p 5432:5432 -d postgres
