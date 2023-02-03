@@ -8,6 +8,7 @@ from vending.app import create_app
 @pytest.fixture()
 def app():
     app = create_app()
+    app.config.update({"WTF_CSRF_ENABLED": False})
 
     yield app
 
