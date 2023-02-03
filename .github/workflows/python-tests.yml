@@ -72,6 +72,14 @@ jobs:
       - name: Install dependencies
         if: steps.poetry-cache.outputs.cache-hit != 'true'
         run: poetry install
+      - name: Install PostgreSQL
+        run: |
+            sudo apt-get update
+            sudo apt-get install --yes postgresql-client
+      - name: Create vending_machine database
+        run: psql -h localhost -U postgres -c 'CREATE DATABASE "vending_machine";'
+        env:
+          PGPASSWORD: mysecretpassword
 
       - name: Test with Pytest
         run: |
