@@ -1,15 +1,18 @@
 from typing import Union
 
+from database import Machine, Product, StockTimeline, db
 from flask import Blueprint, Response, jsonify, request
-
-from vending.database import Machine, Product, db
 
 machine_blueprint = Blueprint("vending_machine", __name__)
 
 
 def status(code: int) -> dict[str, str]:
     """Return the status."""
-    if code == 1:
+    if code == 3:
+        return {"error": "Product not found"}
+    elif code == 2:
+        return {"error": "Machine not found"}
+    elif code == 1:
         return {"error": "Missing required data"}
     elif code == 0:
         return {"message": "Success"}
@@ -51,7 +54,7 @@ def edit_machine() -> dict[str, str]:
 
     machine = Machine.query.filter_by(machine_id=machine_id).first()
     if not machine:
-        return {"error": "Machine not found"}
+        return status(2)
 
     if name:
         machine.machine_name = name
@@ -67,7 +70,7 @@ def delete_machine(machine_id: int) -> dict[str, str]:
     """Delete machine by id."""
     machine = Machine.query.filter_by(machine_id=machine_id).first()
     if not machine:
-        return {"error": "Machine not found"}
+        return status(2)
     db.session.delete(machine)
     db.session.commit()
     return status(0)
@@ -92,6 +95,7 @@ def add_product() -> dict[str, str]:
         return status(1)
 
     product = Product(machine_id=machine_id, product_name=product_name, amount=amount)
+    product.add_or_update_product()
     db.session.add(product)
     db.session.commit()
     return status(0)
@@ -111,15 +115,16 @@ def edit_product() -> dict[str, str]:
 
     product = Product.query.filter_by(product_id=product_id).first()
     if not product:
-        return {"error": "Product not found"}
+        return status(3)
     if machine_id:
         product.machine_id = machine_id
     if product_name:
         product.product_name = product_name
     if amount:
         product.amount = amount
-
+    product.add_or_update_product()
     db.session.commit()
+
     return status(0)
 
 
@@ -128,7 +133,50 @@ def delete_product(product_id: int) -> dict[str, str]:
     """Delete product by id."""
     product = Product.query.filter_by(product_id=product_id).first()
     if not product:
-        return {"error": "Product not found"}
+        return status(3)
+
     db.session.delete(product)
     db.session.commit()
+
     return status(0)
+
+
+@machine_blueprint.route("/stock-timeline/<int:machine_id>/<int:product_id>", methods=["GET"])
+def get_stock_timeline(machine_id: int, product_id: int) -> Union[Response, dict[str, str]]:
+    """Show stock timeline of specific product in specific machine."""
+    timeline = StockTimeline.query.filter_by(machine_id=machine_id, product_id=product_id).all()
+    return jsonify([t.to_json() for t in timeline])
+
+
+@machine_blueprint.route("/product-timeline/<int:product_id>", methods=["GET"])
+def get_product_timeline(product_id: int) -> Union[Response, dict[str, str]]:
+    """Show stock timeline of specific product."""
+    timeline = StockTimeline.query.filter_by(product_id=product_id).all()
+    return jsonify(
+        [
+            {
+                "machine_id": t.machine_id,
+                "machine_name": t.machine.machine_name,
+                "date_time": t.date_time.strftime("%Y-%m-%d %H:%M:%S"),
+                "amount": t.amount,
+            }
+            for t in timeline
+        ]
+    )
+
+
+@machine_blueprint.route("/machine-timeline/<int:machine_id>", methods=["GET"])
+def get_machine_timeline(machine_id: int) -> Union[Response, dict[str, str]]:
+    """Show stock timeline of specific machine."""
+    timeline = StockTimeline.query.filter_by(machine_id=machine_id).all()
+    return jsonify(
+        [
+            {
+                "product_id": t.product_id,
+                "product_name": t.product.product_name,
+                "date_time": t.date_time.strftime("%Y-%m-%d %H:%M:%S"),
+                "amount": t.amount,
+            }
+            for t in timeline
+        ]
+    )

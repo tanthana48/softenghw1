@@ -1,13 +1,13 @@
+from database import db
 from flask import Flask
 from flask_wtf.csrf import CSRFProtect
-
-from vending.database import db
-from vending.vending_machine import machine_blueprint
+from vending_machine import machine_blueprint
 
 
 def create_app() -> Flask:
     """Create flask app."""
     app = Flask(__name__)
+    app.secret_key = "your_secret_key"
     app.register_blueprint(machine_blueprint)
 
     csrf = CSRFProtect()
