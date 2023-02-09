@@ -1,7 +1,8 @@
-from database import db
 from flask import Flask
 from flask_wtf.csrf import CSRFProtect
-from vending_machine import machine_blueprint
+
+from vending.database import db
+from vending.vending_machine import machine_blueprint
 
 
 def create_app() -> Flask:
