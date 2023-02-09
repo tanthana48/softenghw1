@@ -1,7 +1,8 @@
 from typing import Union
 
+from flask import Blueprint, Response, jsonify, request
+
 from vending.database import Machine, Product, StockTimeline, db
-from vending.flask import Blueprint, Response, jsonify, request
 
 machine_blueprint = Blueprint("vending_machine", __name__)
 
