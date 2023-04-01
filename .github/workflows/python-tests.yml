@@ -79,7 +79,7 @@ jobs:
       - name: Create vending_machine database
         run: psql -h localhost -U postgres -c 'CREATE DATABASE "vending_machine";'
         env:
-          PGPASSWORD: mysecretpassword
+          PGPASSWORD: test
 
       - name: Test with Pytest
         run: |
