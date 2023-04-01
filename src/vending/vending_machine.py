@@ -153,31 +153,11 @@ def get_stock_timeline(machine_id: int, product_id: int) -> Union[Response, dict
 def get_product_timeline(product_id: int) -> Union[Response, dict[str, str]]:
     """Show stock timeline of specific product."""
     timeline = StockTimeline.query.filter_by(product_id=product_id).all()
-    return jsonify(
-        [
-            {
-                "machine_id": t.machine_id,
-                "machine_name": t.machine.machine_name,
-                "date_time": t.date_time.strftime("%Y-%m-%d %H:%M:%S"),
-                "amount": t.amount,
-            }
-            for t in timeline
-        ]
-    )
+    return jsonify([t.to_json() for t in timeline])
 
 
 @machine_blueprint.route("/machine-timeline/<int:machine_id>", methods=["GET"])
 def get_machine_timeline(machine_id: int) -> Union[Response, dict[str, str]]:
     """Show stock timeline of specific machine."""
     timeline = StockTimeline.query.filter_by(machine_id=machine_id).all()
-    return jsonify(
-        [
-            {
-                "product_id": t.product_id,
-                "product_name": t.product.product_name,
-                "date_time": t.date_time.strftime("%Y-%m-%d %H:%M:%S"),
-                "amount": t.amount,
-            }
-            for t in timeline
-        ]
-    )
+    return jsonify([t.to_json() for t in timeline])

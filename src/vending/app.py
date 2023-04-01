@@ -14,7 +14,7 @@ def create_app() -> Flask:
     csrf = CSRFProtect()
     csrf.init_app(app)
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:mysecretpassword@localhost:5432/vending_machine"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:test@localhost:5432/vending_machine"
     db.init_app(app)
 
     with app.app_context():

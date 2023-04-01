@@ -51,7 +51,7 @@ jobs:
 
       - name: Run docker
         run: |
-            docker run --name vending_machine -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres
+            docker run --name vending_machine -e POSTGRES_PASSWORD=test -p 5432:5432 -d postgres
 
       - name: Install Poetry
         run: |
