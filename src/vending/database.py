@@ -22,7 +22,7 @@ class StockTimeline(db.Model):
     date_time = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     amount = db.Column(db.Integer, nullable=False)
 
-    machine = db.relationship("Machine", backref=db.backref("machine_timeline", lazy=True), cascade="all,delete")
+    machine = db.relationship("Machine", backref=db.backref("machine_timeline", lazy=True), cascade="all,delete-orphan")
     product = db.relationship("Product", backref=db.backref("product_timeline", lazy=True), cascade="all,delete")
 
     def to_json(self) -> Dict[str, str]:
@@ -51,7 +51,7 @@ class Machine(db.Model):
     location = db.Column(db.String(100), nullable=False)
 
     machine_products = db.relationship(
-        "Product", backref=db.backref("machine_products", lazy=True), cascade="all, delete-orphan"
+        "Product", backref=db.backref("machine_products", lazy=True), cascade="all, delete"
     )
 
     def to_json(self) -> Dict[str, str]:
@@ -74,6 +74,7 @@ class Product(db.Model):
     amount = db.Column(db.Integer, nullable=False)
 
     stock_timelines = db.relationship("StockTimeline", backref=db.backref("products", lazy=True), cascade="all, delete")
+    machine = db.relationship("Machine")
 
     def to_json(self) -> Dict[str, str]:
         """Return machine info to json."""
