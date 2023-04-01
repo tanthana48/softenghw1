@@ -22,8 +22,8 @@ class StockTimeline(db.Model):
     date_time = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     amount = db.Column(db.Integer, nullable=False)
 
-    machine = db.relationship("Machine", backref=db.backref("machine_timeline", lazy=True), cascade="all,delete-orphan")
-    product = db.relationship("Product", backref=db.backref("product_timeline", lazy=True), cascade="all,delete")
+    machine = db.relationship("Machine", back_populates="stock_timelines")
+    product = db.relationship("Product", back_populates="stock_timelines")
 
     def to_json(self) -> Dict[str, str]:
         """Return stock timeline info to json."""
@@ -54,6 +54,8 @@ class Machine(db.Model):
         "Product", backref=db.backref("machine_products", lazy=True), cascade="all, delete"
     )
 
+    stock_timelines = db.relationship("StockTimeline", back_populates="machine")
+
     def to_json(self) -> Dict[str, str]:
         """Return machine info to json."""
         return {"machine_id": self.machine_id, "machine_name": self.machine_name, "location": self.location}
@@ -73,8 +75,7 @@ class Product(db.Model):
     product_name = db.Column(db.String(100), nullable=False)
     amount = db.Column(db.Integer, nullable=False)
 
-    stock_timelines = db.relationship("StockTimeline", backref=db.backref("products", lazy=True), cascade="all, delete")
-    machine = db.relationship("Machine")
+    stock_timelines = db.relationship("StockTimeline", back_populates="product", cascade="all, delete-orphan")
 
     def to_json(self) -> Dict[str, str]:
         """Return machine info to json."""
