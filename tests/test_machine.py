@@ -324,38 +324,49 @@ def test_get_machine_timeline_app(app: create_app, client: FlaskClient):
         assert response.status_code == 200
         assert len(response.json) == 1
 
+
 def test_status_success():
     assert status(0) == {"message": "Success"}
+
 
 def test_edit_machine_update_name_only(client: FlaskClient):
     response = client.post(edit_machine, data={"machine_id": 2, "name": "Test"})
     assert response.status_code == 200
     assert response.get_json() == status(0)
 
+
 def test_edit_machine_update_location_only(client: FlaskClient):
     response = client.post(edit_machine, data={"machine_id": 2, "location": "Test"})
     assert response.status_code == 200
     assert response.get_json() == status(0)
 
+
 def test_add_product_missing_machine_id(client: FlaskClient):
     response = client.post("/add-product", data={"product_name": "Test Product", "amount": 10})
     assert response.get_json() == status(1)
+
 
 def test_add_product_missing_product_name(client: FlaskClient):
     response = client.post("/add-product", data={"machine_id": 2, "amount": 10})
     assert response.get_json() == status(1)
 
+
 def test_add_product_missing_amount(client: FlaskClient):
     response = client.post("/add-product", data={"machine_id": 2, "product_name": "Test Product"})
     assert response.get_json() == status(1)
+
 
 def test_edit_product_missing_product_id(client: FlaskClient):
     response = client.post("/edit-product", data={"amount": 100})
     assert response.get_json() == status(1)
 
+
 def test_edit_product_nonexistent_product(client: FlaskClient):
-    response = client.post("/edit-product", data={"product_id": 200, "machine_id": 1, "product_name": "Test", "amount": 20})
+    response = client.post(
+        "/edit-product", data={"product_id": 200, "machine_id": 1, "product_name": "Test", "amount": 20}
+    )
     assert response.get_json() == status(3)
+
 
 def test_edit_product_name_only(client: FlaskClient):
     app = create_app()
@@ -369,13 +380,7 @@ def test_edit_product_name_only(client: FlaskClient):
         db.session.add(product)
         db.session.commit()
 
-        response = client.post(
-            "/edit-product",
-            data={
-                "product_id": 12,
-                "product_name": "New Product"
-            }
-        )
+        response = client.post("/edit-product", data={"product_id": 12, "product_name": "New Product"})
         print(f"Response JSON: {response.json}")
         assert response.json == status(0)
 
