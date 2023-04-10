@@ -29,6 +29,7 @@ def test_create_machine(client: FlaskClient):
     response = client.post(create_machine, data={"name": "Test Machine", "location": "Test Location"})
     assert response.status_code == 200
     assert response.get_json() == status(0)
+    assert response.get_json() == {"message": "Success"}
 
 
 def test_create_machine_fail(client: FlaskClient):
@@ -322,3 +323,63 @@ def test_get_machine_timeline_app(app: create_app, client: FlaskClient):
         response = client.get(f"/machine-timeline/{machine.machine_id}")
         assert response.status_code == 200
         assert len(response.json) == 1
+
+def test_status_success():
+    assert status(0) == {"message": "Success"}
+
+def test_edit_machine_update_name_only(client: FlaskClient):
+    response = client.post(edit_machine, data={"machine_id": 2, "name": "Test"})
+    assert response.status_code == 200
+    assert response.get_json() == status(0)
+
+def test_edit_machine_update_location_only(client: FlaskClient):
+    response = client.post(edit_machine, data={"machine_id": 2, "location": "Test"})
+    assert response.status_code == 200
+    assert response.get_json() == status(0)
+
+def test_add_product_missing_machine_id(client: FlaskClient):
+    response = client.post("/add-product", data={"product_name": "Test Product", "amount": 10})
+    assert response.get_json() == status(1)
+
+def test_add_product_missing_product_name(client: FlaskClient):
+    response = client.post("/add-product", data={"machine_id": 2, "amount": 10})
+    assert response.get_json() == status(1)
+
+def test_add_product_missing_amount(client: FlaskClient):
+    response = client.post("/add-product", data={"machine_id": 2, "product_name": "Test Product"})
+    assert response.get_json() == status(1)
+
+def test_edit_product_missing_product_id(client: FlaskClient):
+    response = client.post("/edit-product", data={"amount": 100})
+    assert response.get_json() == status(1)
+
+def test_edit_product_nonexistent_product(client: FlaskClient):
+    response = client.post("/edit-product", data={"product_id": 200, "machine_id": 1, "product_name": "Test", "amount": 20})
+    assert response.get_json() == status(3)
+
+def test_edit_product_name_only(client: FlaskClient):
+    app = create_app()
+
+    with app.app_context():
+        machine = Machine(machine_name="Test Machine", location="Test Location")
+        db.session.add(machine)
+        db.session.commit()
+
+        product = Product(machine_id=machine.machine_id, product_name="Test Product", amount=10)
+        db.session.add(product)
+        db.session.commit()
+
+        response = client.post(
+            "/edit-product",
+            data={
+                "product_id": 12,
+                "product_name": "New Product"
+            }
+        )
+        print(f"Response JSON: {response.json}")
+        assert response.json == status(0)
+
+        edited_product = Product.query.get(product.product_id)
+        print(f"Edited Product: {edited_product.to_json()}")
+        assert edited_product.product_name == "New Product"
+        assert edited_product.amount == 10  # The original amount is not changed
