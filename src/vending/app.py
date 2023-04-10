@@ -11,8 +11,8 @@ def create_app() -> Flask:
     app.secret_key = "your_secret_key"
     app.register_blueprint(machine_blueprint)
 
-    #csrf = CSRFProtect()
-    #csrf.init_app(app)
+    csrf = CSRFProtect()
+    csrf.init_app(app)
 
     app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:test@localhost:5432/vending_machine"
     db.init_app(app)
